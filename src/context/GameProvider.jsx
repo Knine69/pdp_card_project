@@ -36,6 +36,7 @@ const GameProvider = ({ children }) => {
 		trios: [],
 		pairs: [],
 	});
+	const [rerender, setRerender] = useState(false);
 
 	const playGame = async () => {
 		setIdGame(await DeckOfCardsAPI.getIdGame());
@@ -91,13 +92,6 @@ const GameProvider = ({ children }) => {
 		}
 		checkTrioOrFourth();
 
-		// console.log(`final trios one: ${JSON.stringify(playerOne.trios)}`);
-		// console.log(`final trios two: ${JSON.stringify(playerTwo.trios)}`);
-		// console.log(`****************************************************`);
-		// console.log(`final fourths one: ${JSON.stringify(playerOne.fourths)}`);
-		// console.log(`final fourths two: ${JSON.stringify(playerTwo.fourths)}`);
-		// console.log(`****************************************************`);
-
 		if (playerOne.fourths.length === 1 && playerOne.trios.length === 2) {
 			setWin(true);
 			setWinName(playerOne.name);
@@ -110,6 +104,7 @@ const GameProvider = ({ children }) => {
 			alert('Player two won');
 			window.location = '/';
 		}
+		setRerender(!rerender);
 	};
 
 	const checkStairCase = pairCards => {
