@@ -93,18 +93,20 @@ const GameProvider = ({ children }) => {
 		checkTrioOrFourth();
 
 		setRerender(!rerender);
-		if (playerOne.fourths.length === 1 && playerOne.trios.length === 2) {
-			setWin(true);
-			setWinName(playerOne.name);
-			alert('Player one won');
-			window.location = '/';
-		}
-		if (playerTwo.fourths.length === 1 && playerTwo.trios.length === 2) {
-			setWin(true);
-			setWinName(playerTwo.name);
-			alert('Player two won');
-			window.location = '/';
-		}
+		setTimeout(() => {
+			if (playerOne.fourths.length === 1 && playerOne.trios.length === 2) {
+				setWin(true);
+				setWinName(playerOne.name);
+				alert('Player one won');
+				window.location = '/';
+			}
+			if (playerTwo.fourths.length === 1 && playerTwo.trios.length === 2) {
+				setWin(true);
+				setWinName(playerTwo.name);
+				alert('Player two won');
+				window.location = '/';
+			}
+		}, 1000);
 	};
 
 	const checkStairCase = pairCards => {
