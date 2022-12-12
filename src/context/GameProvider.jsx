@@ -92,6 +92,7 @@ const GameProvider = ({ children }) => {
 		}
 		checkTrioOrFourth();
 
+		setRerender(!rerender);
 		if (playerOne.fourths.length === 1 && playerOne.trios.length === 2) {
 			setWin(true);
 			setWinName(playerOne.name);
@@ -104,7 +105,6 @@ const GameProvider = ({ children }) => {
 			alert('Player two won');
 			window.location = '/';
 		}
-		setRerender(!rerender);
 	};
 
 	const checkStairCase = pairCards => {
