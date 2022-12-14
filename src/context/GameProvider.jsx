@@ -9,6 +9,7 @@ const GameProvider = ({ children }) => {
 	const [winName, setWinName] = useState('');
 	const ruleOutCardsPlayerOne = [];
 	const ruleOutCardsPlayerTwo = [];
+
 	const cardValues = {
 		JACK: 11,
 		QUEEN: 12,
@@ -54,10 +55,10 @@ const GameProvider = ({ children }) => {
 
 	const requestCards = async () => {
 		if (playerOne.cards.length === 1 && playerTwo.cards.length === 1) {
-			const cards = await DeckOfCardsAPI.getCardsStack(idGame);
+			const cards = await DeckOfCardsAPI.getCards(idGame, 20);
 			updateCardsWholeDeck(cards);
 		} else if (playerOne.cards.length > 1 && playerTwo.cards.length > 1) {
-			const pairCards = await DeckOfCardsAPI.getCardsPair(idGame);
+			const pairCards = await DeckOfCardsAPI.getCards(idGame, 2);
 
 			if (pairCards.length === 0) {
 				alert('Game over, nobody won');
@@ -72,6 +73,7 @@ const GameProvider = ({ children }) => {
 				const cardWithNoBounds = returnCardWithNoBonds(playerOne.cards, true);
 
 				if (cardWithNoBounds) {
+					console.log('Entered swapCard directly one');
 					swapCard(cardWithNoBounds, pairCards[0], true);
 				} else {
 					checkWinCondition(pairCards[0], true);
@@ -84,6 +86,7 @@ const GameProvider = ({ children }) => {
 				const cardWithNoBounds = returnCardWithNoBonds(playerTwo.cards, false);
 
 				if (cardWithNoBounds) {
+					console.log('Entered swapCard directly two');
 					swapCard(cardWithNoBounds, pairCards[1], false);
 				} else {
 					checkWinCondition(pairCards[1], false);
@@ -385,6 +388,7 @@ const GameProvider = ({ children }) => {
 	};
 
 	const swapFromPairWinCondition = (card, one) => {
+		console.log('Entered swapFromPairWinCondition');
 		const player = one ? playerOne : playerTwo;
 		let pairs = player.pairs.filter(pair => pair[0].value !== card.value);
 		const randomCardToSwap = pairs[0][0];
@@ -401,14 +405,16 @@ const GameProvider = ({ children }) => {
 	};
 
 	const swapFromTrioWinCondition = (card, one) => {
+		console.log('Entered swapFromTrioWinCondition');
 		const player = one ? playerOne : playerTwo;
 		const trios = player.trios.filter(trio => trio[0].value !== card.value);
+		const randomCardToSwap = player.pairs[0][0];
 		const pairs = player.pairs.filter(
-			pair => pair[0].value !== player.pairs[0][0]
+			pair => pair[0].value !== randomCardToSwap.value
 		);
 		player.trios = trios;
 		player.pairs = pairs;
-		swapCard(player.pairs[0][0], card, one);
+		swapCard(randomCardToSwap, card, one);
 
 		if (one) {
 			setPlayerOne(player);
@@ -750,6 +756,7 @@ const GameProvider = ({ children }) => {
 				showToast,
 				setShowToast,
 				winName,
+				win,
 			}}
 		>
 			{children}
